@@ -5,16 +5,30 @@ import (
 	"testing"
 )
 
+var _ Observer[int] = &intObserver{}
+
+type intObserver struct {
+	value int
+}
+
+func newIntObserver() *intObserver {
+	return &intObserver{}
+}
+
+func (i *intObserver) Notify(subject *Subject[int]) {
+	i.value = subject.value
+}
+
 func TestObserverNew(t *testing.T) {
-	observer := NewObserver()
+	observer := newIntObserver()
 
 	require.NotNil(t, observer)
 }
 
 func TestObserverUpdate(t *testing.T) {
 	t.Run("", func(t *testing.T) {
-		subject := NewSubject()
-		observer := NewObserver()
+		subject := NewSubject(0)
+		observer := newIntObserver()
 		subject.RegisterObserver(observer)
 
 		subject.Set(1)
@@ -23,8 +37,8 @@ func TestObserverUpdate(t *testing.T) {
 	})
 
 	t.Run("", func(t *testing.T) {
-		subject := NewSubject()
-		observer := NewObserver()
+		subject := NewSubject(0)
+		observer := newIntObserver()
 		subject.RegisterObserver(observer)
 
 		subject.Set(2)
@@ -33,9 +47,9 @@ func TestObserverUpdate(t *testing.T) {
 	})
 
 	t.Run("multiple", func(t *testing.T) {
-		subject := NewSubject()
-		observer1 := NewObserver()
-		observer2 := NewObserver()
+		subject := NewSubject(0)
+		observer1 := newIntObserver()
+		observer2 := newIntObserver()
 		subject.RegisterObserver(observer1)
 		subject.RegisterObserver(observer2)
 

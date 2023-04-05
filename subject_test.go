@@ -6,7 +6,7 @@ import (
 )
 
 func TestSubjectNew(t *testing.T) {
-	subject := NewSubject()
+	subject := NewSubject(1)
 
 	require.NotNil(t, subject)
 }
